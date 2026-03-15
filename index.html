@@ -2,9 +2,9 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Countdown</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown Aprile</title>
 
-<!-- font digitale -->
 <link href="https://fonts.cdnfonts.com/css/digital-7-mono" rel="stylesheet">
 
 <style>
@@ -12,34 +12,28 @@
 body{
 background:black;
 color:white;
-font-family:'Digital-7 Mono', monospace;
+margin:0;
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
 height:100vh;
-margin:0;
+font-family:'Digital-7 Mono', monospace;
+text-align:center;
 }
 
 .title{
 color:red;
-font-size:28px;
-margin-bottom:40px;
 font-family:Arial, sans-serif;
+font-size:clamp(18px,4vw,30px);
+margin-bottom:30px;
 letter-spacing:2px;
 }
 
 .countdown{
 display:flex;
-gap:40px;
-font-size:60px;
-}
-
-.label{
-font-size:18px;
-text-align:center;
-font-family:Arial, sans-serif;
-margin-top:5px;
+gap:clamp(10px,3vw,40px);
+font-size:clamp(32px,10vw,70px);
 }
 
 .unit{
@@ -48,9 +42,16 @@ flex-direction:column;
 align-items:center;
 }
 
+.label{
+font-family:Arial, sans-serif;
+font-size:clamp(10px,3vw,18px);
+margin-top:5px;
+}
+
 .progress-wrapper{
-width:600px;
-margin-top:50px;
+width:90%;
+max-width:600px;
+margin-top:40px;
 }
 
 .progress-labels{
@@ -126,16 +127,20 @@ background:white;
 
 <script>
 
-const startDate = new Date().getTime();
-const now = new Date();
-const targetDate = new Date(now.getFullYear(),2,31,23,59,59,999).getTime();
+const startDate = new Date("2026-04-01T00:00:00").getTime();
+const targetDate = new Date("2026-04-30T23:59:59.999").getTime();
 
 const totalDuration = targetDate - startDate;
 
 function updateCountdown(){
 
-const current = new Date().getTime();
-const diff = targetDate - current;
+const now = new Date().getTime();
+const diff = targetDate - now;
+
+if(now < startDate){
+document.querySelector(".countdown").innerHTML="IN ATTESA DI INIZIO";
+return;
+}
 
 if(diff <= 0){
 document.body.innerHTML="<h1 style='color:white'>TEMPO SCADUTO</h1>";
@@ -154,8 +159,8 @@ minutesEl.textContent = String(minutes).padStart(2,'0');
 secondsEl.textContent = String(seconds).padStart(2,'0');
 msEl.textContent = String(ms).padStart(3,'0');
 
-const elapsed = current - startDate;
-const percent = (elapsed / totalDuration) * 100;
+const elapsed = now - startDate;
+const percent = (elapsed/totalDuration)*100;
 
 progress.style.width = percent + "%";
 
