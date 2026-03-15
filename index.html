@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Countdown</title>
+
+<!-- font digitale -->
+<link href="https://fonts.cdnfonts.com/css/digital-7-mono" rel="stylesheet">
+
+<style>
+
+body{
+background:black;
+color:white;
+font-family:'Digital-7 Mono', monospace;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+height:100vh;
+margin:0;
+}
+
+.title{
+color:red;
+font-size:28px;
+margin-bottom:40px;
+font-family:Arial, sans-serif;
+letter-spacing:2px;
+}
+
+.countdown{
+display:flex;
+gap:40px;
+font-size:60px;
+}
+
+.label{
+font-size:18px;
+text-align:center;
+font-family:Arial, sans-serif;
+margin-top:5px;
+}
+
+.unit{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.progress-wrapper{
+width:600px;
+margin-top:50px;
+}
+
+.progress-labels{
+display:flex;
+justify-content:space-between;
+font-family:Arial, sans-serif;
+font-size:14px;
+margin-bottom:5px;
+}
+
+.progress-container{
+width:100%;
+height:18px;
+background:#222;
+border-radius:20px;
+overflow:hidden;
+}
+
+.progress-bar{
+height:100%;
+width:0%;
+background:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">TEMPO RIMANENTE ALL'INVIO</div>
+
+<div class="countdown">
+
+<div class="unit">
+<div id="days">0</div>
+<div class="label">giorni</div>
+</div>
+
+<div class="unit">
+<div id="hours">00</div>
+<div class="label">ore</div>
+</div>
+
+<div class="unit">
+<div id="minutes">00</div>
+<div class="label">min</div>
+</div>
+
+<div class="unit">
+<div id="seconds">00</div>
+<div class="label">sec</div>
+</div>
+
+<div class="unit">
+<div id="ms">000</div>
+<div class="label">ms</div>
+</div>
+
+</div>
+
+<div class="progress-wrapper">
+
+<div class="progress-labels">
+<span>0%</span>
+<span>100%</span>
+</div>
+
+<div class="progress-container">
+<div class="progress-bar" id="progress"></div>
+</div>
+
+</div>
+
+<script>
+
+const startDate = new Date().getTime();
+const now = new Date();
+const targetDate = new Date(now.getFullYear(),2,31,23,59,59,999).getTime();
+
+const totalDuration = targetDate - startDate;
+
+function updateCountdown(){
+
+const current = new Date().getTime();
+const diff = targetDate - current;
+
+if(diff <= 0){
+document.body.innerHTML="<h1 style='color:white'>TEMPO SCADUTO</h1>";
+return;
+}
+
+const days = Math.floor(diff/(1000*60*60*24));
+const hours = Math.floor((diff/(1000*60*60))%24);
+const minutes = Math.floor((diff/(1000*60))%60);
+const seconds = Math.floor((diff/1000)%60);
+const ms = diff % 1000;
+
+daysEl.textContent = days;
+hoursEl.textContent = String(hours).padStart(2,'0');
+minutesEl.textContent = String(minutes).padStart(2,'0');
+secondsEl.textContent = String(seconds).padStart(2,'0');
+msEl.textContent = String(ms).padStart(3,'0');
+
+const elapsed = current - startDate;
+const percent = (elapsed / totalDuration) * 100;
+
+progress.style.width = percent + "%";
+
+}
+
+const daysEl = document.getElementById("days");
+const hoursEl = document.getElementById("hours");
+const minutesEl = document.getElementById("minutes");
+const secondsEl = document.getElementById("seconds");
+const msEl = document.getElementById("ms");
+
+const progress = document.getElementById("progress");
+
+setInterval(updateCountdown,10);
+
+</script>
+
+</body>
+</html>
